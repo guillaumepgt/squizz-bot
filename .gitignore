@@ -1,3 +1,4 @@
 cookies.json
 local.json
 .gitignore
+__pycache__
