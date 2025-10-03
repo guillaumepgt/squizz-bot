@@ -1,6 +1,4 @@
-# Guide pour Récupérer les Cookies et le LocalStorage pour se Connecter sur Squiz.gg
-
-Ce guide explique étape par étape comment extraire les cookies et les données du localStorage de votre navigateur après vous être connecté sur [squiz.gg](https://squiz.gg). Ces informations sont nécessaires pour automatiser la connexion via des scripts comme Selenium (par exemple, en chargeant `cookies.json` et `local.json` comme dans votre code).
+# Récupérer les Cookies et le LocalStorage pour se Connecter sur Squiz.gg
 
 **Prérequis :**
 - Un navigateur web moderne (Chrome, Firefox, Edge... recommandé : Firefox pour compatibilité avec GeckoDriver).
@@ -10,11 +8,10 @@ Ce guide explique étape par étape comment extraire les cookies et les données
 **Attention :**
 - Les cookies et le localStorage contiennent des données sensibles (comme des tokens d'authentification). Ne les partagez pas et stockez-les en sécurité.
 - Ces données expirent souvent (session-based), donc répétez l'opération si nécessaire.
-- Respectez les conditions d'utilisation de squiz.gg ; l'automatisation pourrait être contre leurs règles.
 
 ## Étape 1 : Se Connecter sur Squiz.gg
 1. Ouvrez votre navigateur et allez sur [https://squiz.gg](https://squiz.gg).
-2. Connectez-vous à votre compte (via email, Google, ou la méthode disponible sur le site).
+2. Connectez-vous à votre compte (via twitch).
 3. Naviguez vers une page nécessitant l'authentification, comme [https://squiz.gg/room/0](https://squiz.gg/room/0), pour que les cookies et localStorage soient chargés.
 
 ## Étape 2 : Ouvrir les Outils de Développement (DevTools)
@@ -51,9 +48,8 @@ Les cookies sont stockés sous le domaine `squiz.gg`.
           "path": "/",
           "secure": true,
           "httpOnly": false,
-          "expiry": 1234567890 // Timestamp Unix si applicable
-        },
-        // Ajoutez les autres cookies...
+          "expiry": 1234567890
+        }
       ]
       ```
 5. Enregistrez ce JSON dans un fichier nommé `cookies.json` (dans le même dossier que votre script).
