@@ -24,3 +24,6 @@ def poser_question(question):
         max_tokens=500,
     )
     return chat_completion.choices[0].message.content.strip()  # Supprime les espaces inutiles
+
+if __name__ == "__main__":
+    print(poser_question(input("Question: ")))

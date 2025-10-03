@@ -149,7 +149,7 @@ try:
 
             # Poser la question et traiter la réponse
             try:
-                result = test.poser_question(texte)
+                result = api_ia.poser_question(texte)
                 print(result)
                 result = result.translate(str.maketrans("", "", ".,()"))
             except Exception as e:
