@@ -1,7 +1,6 @@
 # Squizz-bot
-# Documentation pour le Script d'Automatisation Selenium
 
-Ce document explique comment configurer et exécuter le script Python fourni, qui utilise Selenium pour automatiser une session de navigateur sur le site `https://squiz.gg/room/0`. Le script charge des cookies et du localStorage, attend des questions sur la page, les traite via une API externe (`api_ia`), et envoie des réponses automatisées.
+Ce document explique comment configurer et exécuter le script Python fourni, qui utilise Selenium pour automatiser une session de navigateur sur le site `https://squiz.gg/room/0`. Le script charge des cookies et du localStorage, attend des questions sur la page, les traite via une API externe (`groq`), et envoie des réponses automatisées.
 
 Le script est initialement configuré pour Firefox (avec geckodriver), mais cette documentation couvre également les adaptations pour Chrome (avec chromedriver) et pour une exécution en conteneur Docker. Cela permet d'adapter le lancement en fonction des préférences ou contraintes des utilisateurs (par exemple, pour éviter des problèmes de compatibilité ou pour isoler l'environnement).
 
@@ -10,16 +9,18 @@ Le script est initialement configuré pour Firefox (avec geckodriver), mais cett
 - **Python 3.x** : Assurez-vous d'avoir Python installé (version 3.12 recommandée, mais compatible avec 3.8+).
 - **Dépendances Python** : Installez les paquets nécessaires via pip :
   ```
+  pip install -r requirements.txt
+  ```
+  ou
+  ```
   pip install selenium
   ```
   (Le script utilise également `json`, `time`, `os`, `signal`, `getpass`, `sys`, qui sont standards. Si `psutil` est utilisé pour le nettoyage, installez-le avec `pip install psutil`.)
 - **Fichiers de configuration** :
    - `cookies.json` : Fichier JSON contenant les cookies à charger (optionnel, exportable via les outils de développement du navigateur).
    - `local.json` : Fichier JSON contenant les entrées localStorage à charger (requis pour une session persistante ; exportez-le via DevTools > Application > Local Storage).
-- **API externe** : Le script appelle `api_ia.poser_question(texte)`. Assurez-vous que le module `api_ia` est disponible et fonctionnel (non fourni dans le code).
+- **API externe** : Le script appelle `api_ia.poser_question(texte)`. Assurez-vous que la clé API `groq` est disponible et fonctionnel (non fourni dans le code).
 - **Navigateur et Driver** : Téléchargez le driver correspondant à votre navigateur (voir sections ci-dessous). Assurez-vous que la version du driver correspond à celle du navigateur installé.
-
-**Note de sécurité** : Ce script automatise des interactions sur un site web. Vérifiez les conditions d'utilisation du site pour éviter des violations. Utilisez-le à des fins éducatives ou autorisées seulement.
 
 ## Configuration et Exécution avec Firefox (Configuration par Défaut)
 
