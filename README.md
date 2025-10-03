@@ -1,4 +1,4 @@
-# Récupérer les Cookies et le LocalStorage pour se Connecter sur Squiz.gg
+## Récupérer les Cookies et le LocalStorage pour se Connecter sur Squiz.gg
 
 **Prérequis :**
 - Un navigateur web moderne (Chrome, Firefox, Edge... recommandé : Firefox pour compatibilité avec GeckoDriver).
