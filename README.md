@@ -24,8 +24,6 @@ Le script est initialement configuré pour Firefox (avec geckodriver), mais cett
 
 ## Configuration et Exécution avec Firefox (Configuration par Défaut)
 
-Le script est déjà configuré pour Firefox.
-
 ### Étapes de Setup
 1. **Téléchargez geckodriver** :
    - Allez sur [Mozilla GeckoDriver Releases](https://github.com/mozilla/geckodriver/releases).
@@ -47,74 +45,6 @@ Le script est déjà configuré pour Firefox.
 **Dépannage** :
 - Si des processus geckodriver persistent, le script tente de les tuer via `psutil` ou suggère `pkill -u $(whoami) -f geckodriver`.
 
-## Configuration et Exécution avec Chrome
-
-Pour utiliser Chrome au lieu de Firefox, modifiez le script pour utiliser `webdriver.Chrome`.
-
-### Étapes de Setup
-1. **Téléchargez chromedriver** :
-   - Allez sur [ChromeDriver Downloads](https://googlechromelabs.github.io/chrome-for-testing/).
-   - Téléchargez la version correspondant à votre version de Chrome (ex. : chromedriver-linux64.zip pour Linux).
-   - Extrayez et placez `chromedriver` dans un répertoire accessible (ex. : `/usr/local/bin/`).
-   - Rendez-le exécutable : `chmod +x chromedriver`.
-2. **Installez Chrome** : Assurez-vous que Google Chrome est installé.
-3. **Modifiez le script** :
-   - Importez les modules pour Chrome :
-     ```
-     from selenium.webdriver.chrome.service import Service
-     ```
-   - Remplacez la section `--- CONFIG ---` pour le path :
-     ```
-     CHROMEDRIVER_PATH = "chromedriver"  # chemin absolu recommandé
-     ```
-   - Remplacez la création du service et du driver :
-     ```
-     service = Service(
-         executable_path=CHROMEDRIVER_PATH,
-         log_path=os.devnull  # ou un fichier log
-     )
-     driver = webdriver.Chrome(service=service)
-     ```
-   - Dans la fonction `kill_geckodriver_for_current_user()`, adaptez pour tuer `chromedriver` au lieu de `geckodriver` (remplacez `'geckodriver'` par `'chromedriver'` dans les checks).
-   - Dans le `finally`, adaptez le nettoyage pour `chromedriver`.
-
-### Lancement
-- Même commande que pour Firefox :
-  ```
-  python squizz.py
-  ```
-- Le comportement est identique, mais avec Chrome.
-
-**Dépannage** : Si Chrome bloque les automatisations, ajoutez des options comme `options = webdriver.ChromeOptions(); options.add_argument('--disable-blink-features=AutomationControlled'); driver = webdriver.Chrome(service=service, options=options)`.
-
-## Configuration et Exécution avec Docker
-
-Pour isoler l'exécution (utile pour des environnements sans navigateur installé, ou pour des déploiements), conteneurisez le script avec Docker. Cela utilise un conteneur Selenium standalone.
-
-### Étapes de Setup
-1. **Installez Docker** : Téléchargez et installez Docker depuis [docker.com](https://www.docker.com/products/docker-desktop).
-2. **Build l'image** :
-   ```
-   docker build -t selenium-automation .
-   ```
-3. **Adaptez le script pour Docker** (optionnel) :
-   - Dans Docker, les paths comme `/tmp` fonctionnent, mais montez des volumes pour persister les fichiers (ex. : cookies.json).
-   - Pour un affichage headless (sans GUI), ajoutez des options au driver : `options = webdriver.FirefoxOptions(); options.add_argument('--headless'); driver = webdriver.Firefox(service=service, options=options)`.
-
-### Lancement
-- Lancez le conteneur :
-  ```
-  docker run --rm -v $(pwd):/app selenium-automation
-  ```
-   - `--rm` : Supprime le conteneur après exécution.
-   - `-v $(pwd):/app` : Monte le répertoire courant pour accéder aux fichiers (cookies, localStorage).
-- Pour un mode interactif ou avec logs : Ajoutez `-it` pour un terminal interactif.
-
-**Dépannage** :
-- Si besoin d'un Selenium Grid : Utilisez des images comme `selenium/standalone-firefox` et connectez-vous via RemoteWebDriver : `driver = webdriver.Remote(command_executor='http://localhost:4444/wd/hub', options=webdriver.FirefoxOptions())`.
-- Erreurs de driver : Vérifiez les versions dans le Dockerfile.
-- Pour Chrome dans Docker : Remplacez le téléchargement par chromedriver et utilisez `webdriver.Chrome`.
-
 ## Récupérer les Cookies et le LocalStorage pour se Connecter sur Squiz.gg
 
 **Prérequis :**
@@ -123,7 +53,7 @@ Pour isoler l'exécution (utile pour des environnements sans navigateur install�
 - Aucune extension ou outil supplémentaire n'est requis, mais les Outils de Développement (DevTools) du navigateur suffisent.
 
 **Attention :**
-- Les cookies et le localStorage contiennent des données sensibles (comme des tokens d'authentification). Ne les partagez pas et stockez-les en sécurité.
+- Les cookies et le localStora  ge contiennent des données sensibles (comme des tokens d'authentification). Ne les partagez pas et stockez-les en sécurité.
 - Ces données expirent souvent (session-based), donc répétez l'opération si nécessaire.
 
 ## Étape 1 : Se Connecter sur Squiz.gg
