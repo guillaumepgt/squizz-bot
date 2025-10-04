@@ -39,7 +39,7 @@ Le script est déjà configuré pour Firefox.
 ### Lancement
 - Exécutez le script :
   ```
-  python votre_script.py
+  python squizz.py
   ```
 - Le navigateur s'ouvrira, chargera la page, et entrera en boucle pour traiter les questions.
 - Pour arrêter : Appuyez sur Ctrl+C (le script gère la fermeture proprement).
@@ -81,7 +81,7 @@ Pour utiliser Chrome au lieu de Firefox, modifiez le script pour utiliser `webdr
 ### Lancement
 - Même commande que pour Firefox :
   ```
-  python votre_script.py
+  python squizz.py
   ```
 - Le comportement est identique, mais avec Chrome.
 
@@ -93,39 +93,11 @@ Pour isoler l'exécution (utile pour des environnements sans navigateur install�
 
 ### Étapes de Setup
 1. **Installez Docker** : Téléchargez et installez Docker depuis [docker.com](https://www.docker.com/products/docker-desktop).
-2. **Créez un Dockerfile** : Dans le répertoire du script, créez un fichier `Dockerfile` avec ce contenu :
-   ```
-   # Utilisez une image Python avec Selenium (pour Firefox ou Chrome)
-   FROM python:3.12-slim
-
-   # Installez les dépendances système (pour Firefox, adaptez pour Chrome si needed)
-   RUN apt-get update && apt-get install -y firefox-esr wget unzip && \
-       wget https://github.com/mozilla/geckodriver/releases/download/v0.35.0/geckodriver-v0.35.0-linux64.tar.gz && \
-       tar -xvzf geckodriver-v0.35.0-linux64.tar.gz && \
-       mv geckodriver /usr/local/bin/ && \
-       chmod +x /usr/local/bin/geckodriver && \
-       rm geckodriver-v0.35.0-linux64.tar.gz && \
-       apt-get clean
-
-   # Copiez le script et les fichiers
-   WORKDIR /app
-   COPY votre_script.py .
-   COPY cookies.json .  # Si présent
-   COPY local.json .    # Si présent
-   COPY api_ia.py .     # Si api_ia est un module local
-
-   # Installez les dépendances Python
-   RUN pip install --no-cache-dir selenium psutil
-
-   # Lancez le script
-   CMD ["python", "votre_script.py"]
-   ```
-   - Pour Chrome : Remplacez `firefox-esr` par `google-chrome-stable`, et adaptez le téléchargement pour chromedriver. Modifiez le script dans le conteneur comme dans la section Chrome.
-3. **Build l'image** :
+2. **Build l'image** :
    ```
    docker build -t selenium-automation .
    ```
-4. **Adaptez le script pour Docker** (optionnel) :
+3. **Adaptez le script pour Docker** (optionnel) :
    - Dans Docker, les paths comme `/tmp` fonctionnent, mais montez des volumes pour persister les fichiers (ex. : cookies.json).
    - Pour un affichage headless (sans GUI), ajoutez des options au driver : `options = webdriver.FirefoxOptions(); options.add_argument('--headless'); driver = webdriver.Firefox(service=service, options=options)`.
 
@@ -142,18 +114,6 @@ Pour isoler l'exécution (utile pour des environnements sans navigateur install�
 - Si besoin d'un Selenium Grid : Utilisez des images comme `selenium/standalone-firefox` et connectez-vous via RemoteWebDriver : `driver = webdriver.Remote(command_executor='http://localhost:4444/wd/hub', options=webdriver.FirefoxOptions())`.
 - Erreurs de driver : Vérifiez les versions dans le Dockerfile.
 - Pour Chrome dans Docker : Remplacez le téléchargement par chromedriver et utilisez `webdriver.Chrome`.
-
-## Usage Général
-
-- **Exécution** : Lancez avec `python votre_script.py`. Le script tourne en boucle infinie jusqu'à Ctrl+C.
-- **Personnalisation** :
-   - Changez `BASE_URL` si needed.
-   - Ajustez `OUTPUT_DIR` pour les logs.
-   - Pour plus de robustesse, ajoutez des timeouts ou des retries supplémentaires.
-- **Tests** : Exécutez dans un environnement de test pour éviter des impacts sur des sessions réelles.
-- **Limitations** : Le script dépend de la structure CSS du site (ex. : `div[dir='auto'].r-lrvibr` pour les questions). Si le site change, mettez à jour les sélecteurs.
-
-Si vous avez des questions spécifiques ou besoin d'ajustements, fournissez plus de détails !
 
 ## Récupérer les Cookies et le LocalStorage pour se Connecter sur Squiz.gg
 

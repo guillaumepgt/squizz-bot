@@ -2,3 +2,4 @@ cookies.json
 local.json
 .gitignore
 __pycache__
+geckodriver
